@@ -6,4 +6,5 @@ import warehuis.models.Store;
 
 public interface StoreService {
 	List<Store> getAllStores(Integer page, Integer size);
+	Store save(Store store);
 }

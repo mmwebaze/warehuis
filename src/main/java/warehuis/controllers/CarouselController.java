@@ -15,7 +15,7 @@ import warehuis.services.CarouselServiceImp;
 public class CarouselController {
 	@Autowired
 	private CarouselService carouselService;
-	@RequestMapping("/api/carousel")
+	@RequestMapping("/api/carousels")
 	public @ResponseBody List<Carousel> carousel() {
 		
 		//return new Carousel();

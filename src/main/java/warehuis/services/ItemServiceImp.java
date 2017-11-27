@@ -17,5 +17,9 @@ public class ItemServiceImp implements ItemService{
 		
 		return this.itemRepository.findAll();
 	}
+	@Override
+	public Item save(Item item) {
+		return this.itemRepository.save(item);
+	}
 
 }

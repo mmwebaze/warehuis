@@ -13,7 +13,7 @@ public class StoreItemServiceImp implements StoreItemService{
 	StoreItemRepository storeItemRepository;
 	@Override
 	public void save(StoreItem storeItem) {
-		storeItemRepository.save(storeItem);		
+		this.storeItemRepository.save(storeItem);		
 	}
 
 }

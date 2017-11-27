@@ -17,5 +17,8 @@ public class CarouselServiceImp implements CarouselService{
 		List<Carousel> pageOfCarousels = this.carouselRepository.findAll();
 		return pageOfCarousels;
 	}
+	public Carousel save(Carousel carousel) {
+		return this.carouselRepository.save(carousel);
+	}
 
 }

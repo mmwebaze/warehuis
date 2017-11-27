@@ -17,4 +17,8 @@ public class StoreServiceImp implements StoreService{
 		List<Store> stores = this.storeRepository.findAll();
 		return stores;
 	}
+	public Store save(Store store) {
+		
+		return this.storeRepository.save(store);
+	}
 }

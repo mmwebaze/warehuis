@@ -19,17 +19,21 @@ import warehuis.repository.CarouselRepository;
 import warehuis.repository.ItemRepository;
 import warehuis.repository.StoreItemRepository;
 import warehuis.repository.StoreRepository;
+import warehuis.services.CarouselService;
+import warehuis.services.ItemService;
+import warehuis.services.StoreItemService;
+import warehuis.services.StoreService;
 
 @RestController
 public class dummyController {
 	@Autowired
-	private CarouselRepository carouselRepository;
+	private CarouselService carouselService;
 	@Autowired
-	private StoreRepository storeRepository;
+	private StoreService storeService;
 	@Autowired
-	private ItemRepository itemRepository;
+	private ItemService itemService;
 	@Autowired
-	StoreItemRepository storeItemRepository;
+	StoreItemService storeItemService;
 	@RequestMapping("/data")
 	public String generateDummyData() {
 		
@@ -38,96 +42,58 @@ public class dummyController {
 		carousel.setDescription("My lovely carousel");
 		carousel.setImageUrl("/images/carousel_1.jpg");
 		carousel.setName("My carousel");
-		this.carouselRepository.save(carousel);
+		this.carouselService.save(carousel);
 		
 		// create dummy items
 		Item pineapple = new Item("PINE_LUWERO","pineapples","pineapples from luwero","/images/pineapples.jpg");
-		Item savedPineapple = itemRepository.save(pineapple);
+		Item savedPineapple = itemService.save(pineapple);
 				
 		Item banana = new Item("BANAN_MUSHANGA","Bananas","Bananas from mushanga sheema","/images/banana.jpg");
-		Item savedBanana = itemRepository.save(banana);
+		Item savedBanana = itemService.save(banana);
 				
 		Item apple = new Item("APPLES_KBLE", "Apples", "Green apples from Kabale", "/images/apples.jpg");
-		Item savedApple = itemRepository.save(apple);
+		Item savedApple = itemService.save(apple);
 
 		Calendar currenttime = Calendar.getInstance();
 		Date createdDate = new Date((currenttime.getTime()).getTime());
 		
-		//default inventory
-		
 		// create dummy stores without inventory
 		Store store1 = new Store("BUGOS1", "michael.mwebaze@gmail.com", true, createdDate);
-		Store savedStoreOne = this.storeRepository.save(store1);
+		Store savedStoreOne = this.storeService.save(store1);
 		
 		Store store2 = new Store("BUGOS2", "mwebaze@outlook.com", false, createdDate);
-		Store savedStoreTwo = this.storeRepository.save(store2);
+		Store savedStoreTwo = this.storeService.save(store2);
 		
-		StoreItem defaultStoreItem = new StoreItem();
-		defaultStoreItem.setStore(savedStoreOne);
-		defaultStoreItem.setItem(savedBanana);
-		defaultStoreItem.setPrice(3500);
-		defaultStoreItem.setNumberItems(100);
-		//store1.getStoreItem().add(defaultStoreItem);
+		// Creating store inventories
+		StoreItem inventoryStoreOneBanana = new StoreItem();
+		inventoryStoreOneBanana.setStore(savedStoreOne);
+		inventoryStoreOneBanana.setItem(savedBanana);
+		inventoryStoreOneBanana.setPrice(3500);
+		inventoryStoreOneBanana.setNumberItems(100);
 		
+		StoreItem inventoryStoreOnePineapple = new StoreItem();
+		inventoryStoreOnePineapple.setIdStoreItem(2);
+		inventoryStoreOnePineapple.setStore(savedStoreOne);
+		inventoryStoreOnePineapple.setItem(savedPineapple);
+		inventoryStoreOnePineapple.setPrice(1950);
+		inventoryStoreOnePineapple.setNumberItems(50);
 		
-		
-
-		//Create Store one inventory
-		StoreItem inventoryStoreOne = new StoreItem();
-		//inventoryStoreOne.setStore(store1);
-		inventoryStoreOne.setIdStoreItem(2);
-		inventoryStoreOne.setStore(savedStoreOne);
-		inventoryStoreOne.setItem(savedPineapple);
-		inventoryStoreOne.setPrice(1950);
-		inventoryStoreOne.setNumberItems(50);
+		StoreItem inventoryStoreOneApple = new StoreItem();
+		inventoryStoreOneApple.setIdStoreItem(3);
+		inventoryStoreOneApple.setStore(savedStoreTwo);
+		inventoryStoreOneApple.setItem(savedApple);
+		inventoryStoreOneApple.setPrice(2500);
+		inventoryStoreOneApple.setNumberItems(1000);
 	
-		//savedStoreOne.setStoreItem(s);
-		
-		/*Set<StoreItem> s = new HashSet<StoreItem>();
-		s.add(inventoryStoreOne);
-		savedStoreOne.setStoreItem(s);*/
-		//System.out.println(savedStoreOne.getStoreItem());
-		//store1.getStoreItem().add(inventoryStoreOne);
-		//savedStoreOne.getStoreItem().get(0).setSalePrice(400000);
-		/*Iterator<StoreItem> it = saved.iterator();
-		while(it.hasNext()) {
-			System.out.println(it.next().getStore().getId());  
-		}*/
-		
 		try {
-			this.storeItemRepository.save(inventoryStoreOne);
-			System.out.println("Now inserting the second one");
-			this.storeItemRepository.save(defaultStoreItem);
+			this.storeItemService.save(inventoryStoreOnePineapple);
+			this.storeItemService.save(inventoryStoreOneBanana);
+			this.storeItemService.save(inventoryStoreOneApple);
 		} catch (Exception e) {
 			System.out.println("************->"+e.getLocalizedMessage());
 		}
 		
 		System.out.println("##################");
-		
-		/*StoreItem inventoryStoreTwo = new StoreItem();
-		inventoryStoreTwo.setStore(savedStoreOne);
-		inventoryStoreTwo.setItem(savedPineapple);
-		inventoryStoreTwo.setPrice(3500);
-		inventoryStoreTwo.setNumberItems(40);
-		savedStoreOne.getStoreItem().add(inventoryStoreTwo);
-		storeRepository.save(savedStoreOne);
-		
-		//Create Store two inventory
-		StoreItem inventoryStore1 = new StoreItem();
-		inventoryStore1.setStore(savedStoreTwo);
-		inventoryStore1.setItem(savedBanana);
-		inventoryStore1.setPrice(2000);
-		savedStoreTwo.getStoreItem().add(inventoryStore1);
-		System.out.println(inventoryStore1.getStore().getCode());
-		storeRepository.save(savedStoreTwo);
-		
-		StoreItem inventoryStore2 = new StoreItem();
-		inventoryStore2.setStore(savedStoreTwo);
-		inventoryStore2.setItem(savedPineapple);
-		inventoryStore2.setPrice(5000);
-		inventoryStore2.setNumberItems(100);
-		savedStoreTwo.getStoreItem().add(inventoryStore2);
-		storeRepository.save(savedStoreTwo);*/
 		
 		return "dummy data generated";
 	}
